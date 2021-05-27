@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="f0fd5484-6320-46e8-a01e-760d4a05fb9c" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="a1370cbb-59d3-44c0-8327-8d7eb64a16d2" >
+		<http:request-connection host="google.com" port="80" />
+	</http:request-config>
+	<flow name="lakshmiFlow" doc:id="bb5da231-d773-4064-8350-199f2e73a72b" >
+		<http:listener doc:name="Listener" doc:id="3269d6e0-17de-4fdf-900e-7da8bdeb052e" config-ref="HTTP_Listener_config" path="/hello"/>
+		<set-variable value="hello surya" doc:name="Set Variable" doc:id="9ca3f29c-ce3a-41a9-9d1f-28b9589c2f92" variableName="sam" />
+		<set-payload value="#[vars.sam]" doc:name="Set Payload" doc:id="430ac530-cfe7-4a54-9886-560b8b94ba87" />
+		<flow-ref doc:name="Flow Reference" doc:id="0f3993ec-483e-4cae-b296-97cef9ab0a6b" name="lakshmiSub_Flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="1f4688c7-577b-41b7-9176-2ee9b4d5204a" message="#[vars.sam]"/>
+	</flow>
+	<sub-flow name="lakshmiSub_Flow" doc:id="c4fb246d-1bca-4a5f-aacc-0ebcbc42db8d" >
+		<http:request method="GET" doc:name="Request" doc:id="30921e38-fa24-4bb2-b61d-ff720982c023" config-ref="HTTP_Request_configuration" path="/search"/>
+	</sub-flow>
+</mule>
